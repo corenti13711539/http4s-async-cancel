@@ -1,0 +1,5 @@
+.idea/
+target/
+*.swp
+*.log
+load-test/test-run-output.json

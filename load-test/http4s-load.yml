@@ -1,0 +1,15 @@
+config:
+  target: 'http://localhost:8080'
+  phases:
+    - duration: 30
+      arrivalRate: 20
+  defaults:
+    headers:
+  http:
+    timeout: 20
+scenarios:
+  - flow:
+    - get:
+        url: "/api/foo/op1"
+    - get:
+        url: "/api/bar/op2"

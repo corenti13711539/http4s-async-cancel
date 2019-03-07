@@ -1,0 +1,33 @@
+<configuration>
+    <property name="logPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>demo.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>${logPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="foo" level="debug" />
+
+    <if condition='isDefined("LOG_TO_STDOUT")'>
+        <then>
+            <root level="info">
+                <appender-ref ref="console"/>
+            </root>
+        </then>
+        <else>
+            <root level="info">
+                <appender-ref ref="file" />
+            </root>
+        </else>
+    </if>
+
+</configuration>
