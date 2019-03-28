@@ -6,6 +6,7 @@ import cats.effect._
 import cats.implicits._
 import org.http4s.HttpRoutes
 import scala.language.higherKinds
+import scala.concurrent.duration._
 
 
 class SlowHttpServer[F[_]: ConcurrentEffect : ContextShift : Timer : Par] extends Http4sDsl[F] {
@@ -21,8 +22,7 @@ class SlowHttpServer[F[_]: ConcurrentEffect : ContextShift : Timer : Par] extend
 
   def slowRestService() = HttpRoutes.of[F] {
     case GET -> Root / "slow" =>
-      Thread.sleep(SleepTime)
-      Ok("still there?")
+      Timer[F].sleep(SleepTime.millis) *> Ok("still there?")
   }
 
   def stream: Stream[F, ExitCode] = {
