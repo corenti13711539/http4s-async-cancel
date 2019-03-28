@@ -80,7 +80,7 @@ class HttpServer[F[_]: ConcurrentEffect : ContextShift : Timer : Par](implicit v
     }
 
     private def block[A](thunk: => A, timeout: FiniteDuration): F[A] =
-      contextShift.evalOn(blockingEc)(cats.effect.IO(thunk).timeout(timeout)).to[F]
+      contextShift.evalOn(blockingEc)(cats.effect.IO(thunk)).timeout(timeout).to[F]
 
     def wrappedBlockingCall = block(blockingApiCall(), 30.seconds)
   }
@@ -89,7 +89,7 @@ class HttpServer[F[_]: ConcurrentEffect : ContextShift : Timer : Par](implicit v
     private def helloFuture(name: String) = scala.concurrent.Future {
       Thread.sleep(5000)
       s"hello $name from future"
-    }
+    }(blockingEc)
     def helloF(name: String) =
       IO.fromFuture(IO(helloFuture(name))).guarantee(contextShift.shift).to[F]
   }
